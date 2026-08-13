@@ -1,0 +1,160 @@
+name: "AWS Infrastructure & Kubernetes CI/CD"
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+  pull_request:
+    branches:
+      - main
+      - staging
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Action to perform (apply / destroy)"
+        required: true
+        default: "apply"
+        type: choice
+        options:
+          - apply
+          - destroy
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate-and-lint:
+    name: "1. Security & Quality Check"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+        working-directory: ./terraform
+
+      - name: Run Trivy Security Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          hide-shortcut-text: 'true'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH'
+
+  terraform-plan:
+    name: "2. Terraform Plan"
+    needs: validate-and-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform Workspace Select/Create
+        run: |
+          terraform workspace select ${{ github.ref_name == 'main' && 'prod' || 'dev' }} || terraform workspace new ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+        working-directory: ./terraform
+
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ./terraform
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -out=tfplan
+        working-directory: ./terraform
+
+      - name: Upload Terraform Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tf-plan-${{ github.sha }}
+          path: terraform/tfplan
+
+  terraform-apply:
+    name: "3. Terraform Apply & Deploy Workflows"
+    needs: terraform-plan
+    if: (github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.28.0'
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'v3.13.0'
+
+      - name: Download Terraform Plan Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tf-plan-${{ github.sha }}
+          path: terraform/
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform Select Workspace
+        run: terraform workspace select ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+        working-directory: ./terraform
+
+      - name: Apply Infrastructure
+        run: |
+          if [ "${{ inputs.action }}" == "destroy" ]; then
+            echo "⚠️ Executing Terraform Destroy..."
+            terraform destroy -auto-approve
+          else
+            echo "🚀 Executing Terraform Apply..."
+            terraform apply -auto-approve tfplan
+          fi
+        working-directory: ./terraform
+
+      - name: Configure Kubeconfig & Verify Cluster
+        if: inputs.action != 'destroy'
+        run: |
+          EKS_CLUSTER_NAME=$(terraform output -raw eks_cluster_name)
+          aws eks update-kubeconfig --region ${{ vars.AWS_REGION }} --name $EKS_CLUSTER_NAME
+          kubectl get nodes
+          kubectl get pods -A
+        working-directory: ./terraform
