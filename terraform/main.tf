@@ -5,6 +5,11 @@ data "aws_availability_zones" "available" {
 
 data "aws_caller_identity" "current" {}
 
+# This will be populated after EKS module is created
+data "aws_eks_cluster" "main" {
+  name = module.eks.cluster_name
+}
+
 # Local variables for tagging
 locals {
   common_tags = merge(
@@ -46,7 +51,7 @@ module "iam" {
   source = "./modules/iam"
 
   cluster_name             = "enterprise-eks-${var.environment}"
-  cluster_oidc_provider_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(module.eks.cluster_oidc_issuer_url, "https://", "")}"
+  cluster_oidc_provider_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(data.aws_eks_cluster.main.identity[0].oidc[0].issuer, "https://", "")}"
   kms_key_arn              = module.security.kms_key_arn
 
   tags = local.common_tags
