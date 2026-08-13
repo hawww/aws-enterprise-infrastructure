@@ -71,7 +71,6 @@ module "rds" {
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
   # Monitoring
-  enabled_cloudwatch_logs_exports = ["postgresql"]
   monitoring_interval             = 60
   monitoring_role_arn             = aws_iam_role.rds_monitoring.arn
 
