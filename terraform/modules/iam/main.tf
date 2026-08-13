@@ -43,7 +43,6 @@ module "monitoring_irsa" {
 
   role_name_prefix = "monitoring-"
 
-  attach_xray_write_access_policy = true
   attach_cloudwatch_observability_policy = true
 
   oidc_providers = {
