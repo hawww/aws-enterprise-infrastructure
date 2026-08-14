@@ -131,7 +131,7 @@ resource "aws_db_parameter_group" "main" {
 
 # Automated backup snapshot copy to another region for DR
 resource "aws_db_instance_automated_backups_replication" "main" {
-  provider = aws.dr
+  provider               = aws.dr
   source_db_instance_arn = module.rds.db_instance_arn
 
   kms_key_id = var.kms_key_arn

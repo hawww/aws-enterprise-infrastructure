@@ -27,8 +27,8 @@ module "addons" {
   source = "./modules/addons"
 
   cluster_name = module.eks.cluster_name
-  aws_region = var.aws_region
-  
+  aws_region   = var.aws_region
+
   ebs_csi_role_arn            = module.iam.ebs_csi_role_arn
   alb_controller_role_arn     = module.iam.alb_controller_role_arn
   cluster_autoscaler_role_arn = module.iam.cluster_autoscaler_role_arn
@@ -75,18 +75,18 @@ module "iam" {
 module "eks" {
   source = "./modules/eks"
 
-  project_name                = var.project_name
-  environment                 = var.environment
-  aws_region                  = var.aws_region
-  cluster_version             = var.cluster_version
-  vpc_id                      = module.vpc.vpc_id
-  private_subnets             = module.vpc.private_subnets
-  public_subnets              = module.vpc.public_subnets
-  node_instance_types         = var.node_instance_types
-  node_group_min_size         = var.node_group_min_size
-  node_group_max_size         = var.node_group_max_size
-  node_group_desired_size     = var.node_group_desired_size
-  kms_key_arn                 = module.security.kms_key_arn
+  project_name            = var.project_name
+  environment             = var.environment
+  aws_region              = var.aws_region
+  cluster_version         = var.cluster_version
+  vpc_id                  = module.vpc.vpc_id
+  private_subnets         = module.vpc.private_subnets
+  public_subnets          = module.vpc.public_subnets
+  node_instance_types     = var.node_instance_types
+  node_group_min_size     = var.node_group_min_size
+  node_group_max_size     = var.node_group_max_size
+  node_group_desired_size = var.node_group_desired_size
+  kms_key_arn             = module.security.kms_key_arn
   #ebs_csi_role_arn            = module.iam.ebs_csi_role_arn
   #alb_controller_role_arn     = module.iam.alb_controller_role_arn
   #cluster_autoscaler_role_arn = module.iam.cluster_autoscaler_role_arn
