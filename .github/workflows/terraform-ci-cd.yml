@@ -77,6 +77,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
 
+      # This step provides the missing "client config" to build the REST client:
+      - name: Update Kubeconfig
+        run: |
+          aws eks update-kubeconfig --name <YOUR_CLUSTER_NAME> --region us-east-1
+                
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
