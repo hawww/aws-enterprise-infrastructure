@@ -11,7 +11,7 @@ output "db_instance_arn" {
 
 output "db_instance_id" {
   description = "The RDS instance name"
-  value       = module.rds.db_instance_id
+  value       = module.rds.db_instance_identifier
 }
 
 output "db_instance_resource_id" {

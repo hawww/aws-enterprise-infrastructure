@@ -28,6 +28,11 @@ module "rds" {
   source  = "terraform-aws-modules/rds/aws"
   version = "6.4.0"
 
+  providers = {
+    aws = aws
+    aws.dr = aws.dr
+  }
+
   identifier = "${var.project_name}-db-${var.environment}"
 
   # Engine Configuration
