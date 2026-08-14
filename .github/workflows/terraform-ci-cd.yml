@@ -92,9 +92,19 @@ jobs:
         working-directory: ./terraform
 
       - name: Terraform Plan
+        env:
+          TF_LOG: DEBUG
+          TF_LOG_PATH: terraform.log
         id: plan
-        run: terraform plan -no-color -out=tfplan
+        run: terraform plan -no-color -out=tfplan -parallelism=1
         working-directory: ./terraform
+
+      - name: Upload Terraform Log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-log
+          path: terraform.log
 
       - name: Upload Terraform Plan Artifact
         uses: actions/upload-artifact@v4
