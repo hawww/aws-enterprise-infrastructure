@@ -48,7 +48,7 @@ jobs:
           rm -f .terraform.lock.hcl
 
       - name: Terraform Init
-        run: terraform init -upgrade
+        run: terraform init -reconfigure
 
       - name: Run Trivy Security Scanner
         uses: aquasecurity/trivy-action@master
