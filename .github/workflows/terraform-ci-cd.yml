@@ -41,7 +41,6 @@ jobs:
       - name: Select Default Workspace
         run: |
           terraform workspace select -or-create prod
-          terraform workspace select prod          
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
