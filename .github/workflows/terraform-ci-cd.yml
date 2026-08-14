@@ -99,7 +99,7 @@ jobs:
         env:
           TF_LOG: DEBUG
         id: plan
-        run: terraform plan -no-color -out=tfplan -parallelism=1
+        run: terraform plan -no-color -out=tfplan -parallelism=1 -var="db_password=MyStrongPassword123!"
         working-directory: ./terraform
 
       - name: Upload Terraform Log
