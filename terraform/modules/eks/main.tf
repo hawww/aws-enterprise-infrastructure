@@ -88,7 +88,7 @@ module "eks" {
 resource "aws_autoscaling_group_tag" "cluster_autoscaler_discovery" {
   for_each = module.eks.eks_managed_node_groups
 
-  autoscaling_group_name = each.value.asg_name
+  autoscaling_group_name = each.value.node_group_autoscaling_group_names[0]
 
   tag {
     key                 = "k8s.io/cluster-autoscaler/${module.eks.cluster_name}"

@@ -16,7 +16,7 @@ output "cluster_certificate_authority_data" {
 
 output "cluster_oidc_issuer_url" {
   description = "The URL on the EKS cluster OIDC Issuer"
-  value       = trimprefix(module.eks.cluster_identity_providers["oidc"].oidc_provider_arn, "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/")
+  value       = module.eks.cluster_oidc_issuer_url
 }
 
 output "node_security_group_id" {
