@@ -131,16 +131,18 @@ resource "aws_db_parameter_group" "main" {
 
 # Automated backup snapshot copy to another region for DR
 resource "aws_db_instance_automated_backups_replication" "main" {
+  provider = aws.dr
   source_db_instance_arn = module.rds.db_instance_arn
-  target_region          = var.dr_region
 
   kms_key_id = var.kms_key_arn
 }
 
 # EventSubscription for RDS Events
 resource "aws_db_event_subscription" "main" {
-  name_prefix      = "${var.project_name}-"
-  sns_topic_arn    = var.sns_topic_arn
+  name_prefix = "${var.project_name}-"
+
+  sns_topic = var.sns_topic_arn
+
   source_type      = "db-instance"
   event_categories = ["availability", "backup", "failure", "recovery"]
 

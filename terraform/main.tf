@@ -6,9 +6,9 @@ data "aws_availability_zones" "available" {
 data "aws_caller_identity" "current" {}
 
 # This will be populated after EKS module is created
-data "aws_eks_cluster" "main" {
-  name = module.eks.cluster_name
-}
+#data "aws_eks_cluster" "main" {
+#  name = module.eks.cluster_name
+#}
 
 # Local variables for tagging
 locals {
@@ -20,6 +20,18 @@ locals {
       Region      = var.aws_region
     }
   )
+}
+
+
+module "addons" {
+  source = "./modules/addons"
+
+  cluster_name = module.eks.cluster_name
+  aws_region = var.aws_region
+  
+  ebs_csi_role_arn            = module.iam.ebs_csi_role_arn
+  alb_controller_role_arn     = module.iam.alb_controller_role_arn
+  cluster_autoscaler_role_arn = module.iam.cluster_autoscaler_role_arn
 }
 
 # Module 1: Security (KMS, S3, CloudTrail, GuardDuty, SecurityHub)
@@ -51,12 +63,12 @@ module "iam" {
   source = "./modules/iam"
 
   cluster_name              = "enterprise-eks-${var.environment}"
-  cluster_oidc_provider_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(data.aws_eks_cluster.main.identity[0].oidc[0].issuer, "https://", "")}"
+  cluster_oidc_provider_arn = module.eks.oidc_provider_arn
   kms_key_arn               = module.security.kms_key_arn
 
   tags = local.common_tags
 
-  depends_on = [module.eks]
+  #depends_on = [module.eks]
 }
 
 # Module 4: EKS Cluster with add-ons and Helm providers
@@ -75,9 +87,9 @@ module "eks" {
   node_group_max_size         = var.node_group_max_size
   node_group_desired_size     = var.node_group_desired_size
   kms_key_arn                 = module.security.kms_key_arn
-  ebs_csi_role_arn            = module.iam.ebs_csi_role_arn
-  alb_controller_role_arn     = module.iam.alb_controller_role_arn
-  cluster_autoscaler_role_arn = module.iam.cluster_autoscaler_role_arn
+  #ebs_csi_role_arn            = module.iam.ebs_csi_role_arn
+  #alb_controller_role_arn     = module.iam.alb_controller_role_arn
+  #cluster_autoscaler_role_arn = module.iam.cluster_autoscaler_role_arn
 
   tags = local.common_tags
 }
@@ -141,14 +153,77 @@ resource "kubernetes_manifest" "user_service" {
   depends_on = [kubernetes_namespace.default, module.eks]
 }
 
+
+resource "kubernetes_manifest" "user_service1" {
+  manifest = yamldecode(file("${path.module}/k8s-manifests/microservice-user1.yaml"))
+
+  depends_on = [kubernetes_namespace.default, module.eks]
+}
+
+
+resource "kubernetes_manifest" "user_service2" {
+  manifest = yamldecode(file("${path.module}/k8s-manifests/microservice-user2.yaml"))
+
+  depends_on = [kubernetes_namespace.default, module.eks]
+}
+
+
+resource "kubernetes_manifest" "user_service3" {
+  manifest = yamldecode(file("${path.module}/k8s-manifests/microservice-user3.yaml"))
+
+  depends_on = [kubernetes_namespace.default, module.eks]
+}
+
+
+resource "kubernetes_manifest" "user_service4" {
+  manifest = yamldecode(file("${path.module}/k8s-manifests/microservice-user4.yaml"))
+
+  depends_on = [kubernetes_namespace.default, module.eks]
+}
+
+
 resource "kubernetes_manifest" "order_service" {
   manifest = yamldecode(file("${path.module}/k8s-manifests/microservice-order.yaml"))
 
   depends_on = [kubernetes_namespace.default, module.eks]
 }
 
+
+resource "kubernetes_manifest" "order_service1" {
+  manifest = yamldecode(file("${path.module}/k8s-manifests/microservice-order1.yaml"))
+
+  depends_on = [kubernetes_namespace.default, module.eks]
+}
+
+
+resource "kubernetes_manifest" "order_service2" {
+  manifest = yamldecode(file("${path.module}/k8s-manifests/microservice-order2.yaml"))
+
+  depends_on = [kubernetes_namespace.default, module.eks]
+}
+
+
+resource "kubernetes_manifest" "order_service3" {
+  manifest = yamldecode(file("${path.module}/k8s-manifests/microservice-order3.yaml"))
+
+  depends_on = [kubernetes_namespace.default, module.eks]
+}
+
+
+resource "kubernetes_manifest" "order_service4" {
+  manifest = yamldecode(file("${path.module}/k8s-manifests/microservice-order4.yaml"))
+
+  depends_on = [kubernetes_namespace.default, module.eks]
+}
+
 resource "kubernetes_manifest" "ingress" {
   manifest = yamldecode(file("${path.module}/k8s-manifests/ingress.yaml"))
+
+  depends_on = [kubernetes_namespace.default, module.eks, module.monitoring]
+}
+
+resource "kubernetes_manifest" "ingress1" {
+  manifest = yamldecode(file("${path.module}/k8s-manifests/ingress1.yaml"))
 
   depends_on = [kubernetes_namespace.default, module.eks, module.monitoring]
 }
@@ -160,21 +235,21 @@ resource "aws_route53_zone" "primary" {
   tags = local.common_tags
 }
 
-resource "aws_route53_health_check" "primary_alb" {
-  type              = "HTTP"
-  ip_address        = "" # Will be set to ALB IP
-  port              = 80
-  resource_path     = "/healthz"
-  failure_threshold = 3
-  request_interval  = 30
-
-  tags = merge(
-    local.common_tags,
-    {
-      Name = "primary-health-check"
-    }
-  )
-}
+#resource "aws_route53_health_check" "primary_alb" {
+#  type              = "HTTP"
+#  ip_address        = "" # Will be set to ALB IP
+#  port              = 80
+#  resource_path     = "/healthz"
+#  failure_threshold = 3
+#  request_interval  = 30
+#
+#  tags = merge(
+#    local.common_tags,
+#    {
+#      Name = "primary-health-check"
+#    }
+#  )
+#}
 
 resource "aws_route53_record" "app_alias" {
   zone_id = aws_route53_zone.primary.zone_id

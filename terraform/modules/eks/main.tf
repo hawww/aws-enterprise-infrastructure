@@ -58,27 +58,27 @@ module "eks" {
 
   # Add-ons Configuration
   cluster_addons = {
-    coredns = {
-      most_recent = true
-      configuration_values = jsonencode({
-        computeType = "ec2"
-      })
-    }
-    kube-proxy = {
-      most_recent = true
-    }
-    vpc-cni = {
-      most_recent = true
-      configuration_values = jsonencode({
-        env = {
-          ENABLE_WINDOWS_IPAM = "true"
-        }
-      })
-    }
-    aws-ebs-csi-driver = {
-      most_recent              = true
-      service_account_role_arn = var.ebs_csi_role_arn
-    }
+    #coredns = {
+    #  most_recent = true
+    #  configuration_values = jsonencode({
+    #    computeType = "ec2"
+    #  })
+    #}
+    #kube-proxy = {
+    #  most_recent = true
+    #}
+    #vpc-cni = {
+    #  most_recent = true
+    #  configuration_values = jsonencode({
+    #    env = {
+    #      ENABLE_WINDOWS_IPAM = "true"
+    #    }
+    #  })
+    #}
+    #aws-ebs-csi-driver = {
+    #  most_recent              = true
+    #  service_account_role_arn = var.ebs_csi_role_arn
+    #}
   }
 
   tags = var.tags
@@ -117,49 +117,49 @@ data "aws_eks_cluster_auth" "cluster" {
 }
 
 # Install AWS Load Balancer Controller
-resource "helm_release" "aws_load_balancer_controller" {
-  name       = "aws-load-balancer-controller"
-  repository = "https://aws.github.io/eks-charts"
-  chart      = "aws-load-balancer-controller"
-  namespace  = "kube-system"
-
-  set {
-    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = var.alb_controller_role_arn
-  }
-
-  set {
-    name  = "clusterName"
-    value = module.eks.cluster_name
-  }
-
-  depends_on = [module.eks]
-}
+#resource "helm_release" "aws_load_balancer_controller" {
+#  name       = "aws-load-balancer-controller"
+#  repository = "https://aws.github.io/eks-charts"
+#  chart      = "aws-load-balancer-controller"
+#  namespace  = "kube-system"
+#
+#  set {
+#    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+#    value = var.alb_controller_role_arn
+#  }
+#
+#  set {
+#    name  = "clusterName"
+#    value = module.eks.cluster_name
+#  }
+#
+#  depends_on = [module.eks]
+#}
 
 # Install Cluster Autoscaler
-resource "helm_release" "cluster_autoscaler" {
-  name       = "cluster-autoscaler"
-  repository = "https://kubernetes.github.io/autoscaler"
-  chart      = "cluster-autoscaler"
-  namespace  = "kube-system"
-
-  set {
-    name  = "awsRegion"
-    value = var.aws_region
-  }
-
-  set {
-    name  = "autoDiscovery.clusterName"
-    value = module.eks.cluster_name
-  }
-
-  set {
-    name  = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = var.cluster_autoscaler_role_arn
-  }
-
-  depends_on = [helm_release.aws_load_balancer_controller]
-}
+#resource "helm_release" "cluster_autoscaler" {
+#  name       = "cluster-autoscaler"
+#  repository = "https://kubernetes.github.io/autoscaler"
+#  chart      = "cluster-autoscaler"
+#  namespace  = "kube-system"
+#
+#  set {
+#    name  = "awsRegion"
+#    value = var.aws_region
+#  }
+#
+#  set {
+#    name  = "autoDiscovery.clusterName"
+#    value = module.eks.cluster_name
+#  }
+#
+#  set {
+#    name  = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+#    value = var.cluster_autoscaler_role_arn
+#  }
+#
+#  depends_on = [helm_release.aws_load_balancer_controller]
+#}
 
 # Storage Class for EBS volumes
 resource "kubernetes_storage_class" "ebs_gp3" {

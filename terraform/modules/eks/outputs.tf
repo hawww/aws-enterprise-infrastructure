@@ -30,3 +30,12 @@ output "cluster_security_group_id" {
 }
 
 data "aws_caller_identity" "current" {}
+
+
+output "oidc_provider_arn" {
+  value = module.eks.oidc_provider_arn
+}
+
+output "oidc_provider" {
+  value = module.eks.oidc_provider
+}

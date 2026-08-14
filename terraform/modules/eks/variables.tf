@@ -63,20 +63,20 @@ variable "kms_key_arn" {
   type        = string
 }
 
-variable "ebs_csi_role_arn" {
-  description = "ARN of EBS CSI driver IAM role"
-  type        = string
-}
+#variable "ebs_csi_role_arn" {
+#  description = "ARN of EBS CSI driver IAM role"
+#  type        = string
+#}
 
-variable "alb_controller_role_arn" {
-  description = "ARN of ALB controller IAM role"
-  type        = string
-}
+#variable "alb_controller_role_arn" {
+#  description = "ARN of ALB controller IAM role"
+#  type        = string
+#}
 
-variable "cluster_autoscaler_role_arn" {
-  description = "ARN of Cluster Autoscaler IAM role"
-  type        = string
-}
+#variable "cluster_autoscaler_role_arn" {
+#  description = "ARN of Cluster Autoscaler IAM role"
+#  type        = string
+#}
 
 variable "tags" {
   description = "Common tags to apply to resources"
