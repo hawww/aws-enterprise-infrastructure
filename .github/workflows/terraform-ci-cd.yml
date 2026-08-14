@@ -29,6 +29,8 @@ jobs:
   validate-and-lint:
     name: "1. Security & Quality Check"
     runs-on: ubuntu-latest
+    env:
+      TF_WORKSPACE: default
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
