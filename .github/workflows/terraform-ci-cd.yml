@@ -76,7 +76,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.6.0
+          terraform_version: 1.13.0
 
       - name: Terraform Init
         run: terraform init
@@ -121,7 +121,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.6.0
+          terraform_version: 1.13.0
 
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
