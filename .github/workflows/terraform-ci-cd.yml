@@ -93,8 +93,7 @@ jobs:
 
       - name: Terraform Plan
         env:
-          TF_LOG: DEBUG
-          TF_LOG_PATH: terraform.log
+          TF_LOG: INFO
         id: plan
         run: terraform plan -no-color -out=tfplan -parallelism=1
         working-directory: ./terraform
