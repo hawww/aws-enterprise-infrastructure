@@ -33,6 +33,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Remove Terraform Cache
+        run: |
+          rm -rf .terraform
+          rm -f .terraform.lock.hcl
+
+      - name: Terraform Init
+        run: terraform init -upgrade
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
