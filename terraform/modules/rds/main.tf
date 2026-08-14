@@ -29,7 +29,7 @@ module "rds" {
   version = "6.4.0"
 
   providers = {
-    aws = aws
+    aws    = aws
     aws.dr = aws.dr
   }
 
