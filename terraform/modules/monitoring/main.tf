@@ -10,8 +10,8 @@ resource "aws_cloudwatch_log_group" "eks_cluster" {
 
 # SNS Topic for CloudWatch Alarms
 resource "aws_sns_topic" "alerts" {
-  name_prefix             = "${var.project_name}-alerts-"
-  kms_master_key_id       = var.kms_key_arn
+  name_prefix       = "${var.project_name}-alerts-"
+  kms_master_key_id = var.kms_key_arn
 
   tags = var.tags
 }
@@ -36,7 +36,7 @@ resource "helm_release" "kube_prometheus_stack" {
     yamlencode({
       prometheus = {
         prometheusSpec = {
-          retention       = "30d"
+          retention = "30d"
           storageSpec = {
             volumeClaimTemplate = {
               spec = {
@@ -66,9 +66,9 @@ resource "helm_release" "kube_prometheus_stack" {
       grafana = {
         enabled = true
         persistence = {
-          enabled       = true
+          enabled          = true
           storageClassName = "ebs-gp3"
-          size          = "10Gi"
+          size             = "10Gi"
         }
         adminPassword = var.grafana_admin_password
       }
@@ -79,11 +79,11 @@ resource "helm_release" "kube_prometheus_stack" {
             resolve_timeout = "5m"
           }
           route = {
-            group_by      = ["alertname", "cluster", "service"]
-            group_wait    = "10s"
-            group_interval = "10s"
+            group_by        = ["alertname", "cluster", "service"]
+            group_wait      = "10s"
+            group_interval  = "10s"
             repeat_interval = "12h"
-            receiver      = "default"
+            receiver        = "default"
           }
           receivers = [
             {

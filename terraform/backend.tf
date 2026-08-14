@@ -13,11 +13,11 @@ terraform {
   # Then uncomment the backend block below and update the bucket name and table name:
   #
   backend "s3" {
-     bucket         = "enterprise-tfstate-us-east-1"
-     key            = "enterprise-infra/terraform.tfstate"
-     region         = "us-east-1"
-     dynamodb_table = "enterprise-tflock"
-     encrypt        = true
+    bucket         = "enterprise-tfstate-us-east-1"
+    key            = "enterprise-infra/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "enterprise-tflock"
+    encrypt        = true
   }
 
   required_providers {

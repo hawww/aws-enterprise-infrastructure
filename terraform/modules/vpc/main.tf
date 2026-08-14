@@ -20,20 +20,20 @@ module "vpc" {
   enable_dns_support   = true
 
   # Enable flow logs for security monitoring
-  enable_flow_log                      = true
-  create_flow_log_cloudwatch_iam_role  = true
-  create_flow_log_cloudwatch_log_group = true
+  enable_flow_log                                 = true
+  create_flow_log_cloudwatch_iam_role             = true
+  create_flow_log_cloudwatch_log_group            = true
   flow_log_cloudwatch_log_group_retention_in_days = 30
 
   # Tags for EKS/ALB integration
   public_subnet_tags = {
-    "kubernetes.io/role/elb"                    = "1"
-    "kubernetes.io/role/internal-elb"           = "1"
+    "kubernetes.io/role/elb"          = "1"
+    "kubernetes.io/role/internal-elb" = "1"
   }
 
   private_subnet_tags = {
-    "kubernetes.io/role/internal-elb"           = "1"
-    "kubernetes.io/role/elb"                    = "1"
+    "kubernetes.io/role/internal-elb" = "1"
+    "kubernetes.io/role/elb"          = "1"
   }
 
   tags = {

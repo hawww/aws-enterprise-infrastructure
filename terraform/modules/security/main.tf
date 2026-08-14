@@ -96,7 +96,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "logs_lifecycle" {
     }
 
     expiration {
-      days = 2555  # 7 years
+      days = 2555 # 7 years
     }
   }
 }
@@ -137,7 +137,7 @@ resource "aws_cloudtrail" "main" {
   include_global_service_events = true
   is_multi_region_trail         = true
   enable_log_file_validation    = true
-  kms_key_id                    = "${aws_kms_key.main.arn}"
+  kms_key_id                    = aws_kms_key.main.arn
 
   depends_on = [aws_s3_bucket_policy.central_logs]
 }
@@ -162,9 +162,9 @@ resource "aws_guardduty_detector" "main" {
 
 # GuardDuty Publishing Destination
 resource "aws_guardduty_publishing_destination" "main" {
-  detector_id             = aws_guardduty_detector.main.id
-  destination_arn         = aws_s3_bucket.central_logs.arn
-  kms_key_arn             = aws_kms_key.main.arn
+  detector_id     = aws_guardduty_detector.main.id
+  destination_arn = aws_s3_bucket.central_logs.arn
+  kms_key_arn     = aws_kms_key.main.arn
 
   depends_on = [aws_guardduty_detector.main]
 }
@@ -179,13 +179,13 @@ resource "aws_securityhub_organization_admin_account" "main" {
 
 # Enable standards
 resource "aws_securityhub_standards_subscription" "cis" {
-  depends_on       = [aws_securityhub_account.main]
-  standards_arn    = "arn:aws:securityhub:${var.aws_region}::standards/aws-foundational-security-best-practices/v/1.0.0"
+  depends_on    = [aws_securityhub_account.main]
+  standards_arn = "arn:aws:securityhub:${var.aws_region}::standards/aws-foundational-security-best-practices/v/1.0.0"
 }
 
 resource "aws_securityhub_standards_subscription" "pci_dss" {
-  depends_on       = [aws_securityhub_account.main]
-  standards_arn    = "arn:aws:securityhub:${var.aws_region}::standards/pci-dss/v/3.2.1"
+  depends_on    = [aws_securityhub_account.main]
+  standards_arn = "arn:aws:securityhub:${var.aws_region}::standards/pci-dss/v/3.2.1"
 }
 
 # --- CloudWatch Log Group for VPC Flow Logs ---
@@ -219,8 +219,8 @@ resource "aws_iam_role" "vpc_flow_logs" {
 }
 
 resource "aws_iam_role_policy" "vpc_flow_logs" {
-  name   = "vpc-flow-logs-policy"
-  role   = aws_iam_role.vpc_flow_logs.id
+  name = "vpc-flow-logs-policy"
+  role = aws_iam_role.vpc_flow_logs.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [

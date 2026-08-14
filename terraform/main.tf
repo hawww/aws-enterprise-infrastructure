@@ -50,9 +50,9 @@ module "vpc" {
 module "iam" {
   source = "./modules/iam"
 
-  cluster_name             = "enterprise-eks-${var.environment}"
+  cluster_name              = "enterprise-eks-${var.environment}"
   cluster_oidc_provider_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:oidc-provider/${replace(data.aws_eks_cluster.main.identity[0].oidc[0].issuer, "https://", "")}"
-  kms_key_arn              = module.security.kms_key_arn
+  kms_key_arn               = module.security.kms_key_arn
 
   tags = local.common_tags
 
@@ -63,11 +63,11 @@ module "iam" {
 module "eks" {
   source = "./modules/eks"
 
-  project_name                 = var.project_name
-  environment                  = var.environment
-  aws_region                   = var.aws_region
-  cluster_version              = var.cluster_version
-  vpc_id                       = module.vpc.vpc_id
+  project_name                = var.project_name
+  environment                 = var.environment
+  aws_region                  = var.aws_region
+  cluster_version             = var.cluster_version
+  vpc_id                      = module.vpc.vpc_id
   private_subnets             = module.vpc.private_subnets
   public_subnets              = module.vpc.public_subnets
   node_instance_types         = var.node_instance_types
@@ -93,16 +93,16 @@ module "rds" {
   allowed_security_groups = [
     module.eks.node_security_group_id
   ]
-  db_name              = var.db_name
-  db_username          = var.db_username
-  db_password          = var.db_password
-  db_instance_class    = var.db_instance_class
-  db_allocated_storage = var.db_allocated_storage
+  db_name                  = var.db_name
+  db_username              = var.db_username
+  db_password              = var.db_password
+  db_instance_class        = var.db_instance_class
+  db_allocated_storage     = var.db_allocated_storage
   db_max_allocated_storage = var.db_max_allocated_storage
-  backup_retention_days = var.backup_retention_days
-  dr_region            = var.aws_region_dr
-  kms_key_arn          = module.security.kms_key_arn
-  sns_topic_arn        = module.monitoring.sns_topic_arn
+  backup_retention_days    = var.backup_retention_days
+  dr_region                = var.aws_region_dr
+  kms_key_arn              = module.security.kms_key_arn
+  sns_topic_arn            = module.monitoring.sns_topic_arn
 
   tags = local.common_tags
 
@@ -161,12 +161,12 @@ resource "aws_route53_zone" "primary" {
 }
 
 resource "aws_route53_health_check" "primary_alb" {
-  type            = "HTTP"
-  ip_address      = ""  # Will be set to ALB IP
-  port            = 80
-  resource_path   = "/healthz"
+  type              = "HTTP"
+  ip_address        = "" # Will be set to ALB IP
+  port              = 80
+  resource_path     = "/healthz"
   failure_threshold = 3
-  request_interval = 30
+  request_interval  = 30
 
   tags = merge(
     local.common_tags,

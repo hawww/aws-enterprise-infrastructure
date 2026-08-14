@@ -31,12 +31,12 @@ module "rds" {
   identifier = "${var.project_name}-db-${var.environment}"
 
   # Engine Configuration
-  engine               = "postgres"
-  engine_version       = var.db_engine_version
-  family               = var.db_family
-  major_engine_version = var.db_major_version
-  instance_class       = var.db_instance_class
-  allocated_storage    = var.db_allocated_storage
+  engine                = "postgres"
+  engine_version        = var.db_engine_version
+  family                = var.db_family
+  major_engine_version  = var.db_major_version
+  instance_class        = var.db_instance_class
+  allocated_storage     = var.db_allocated_storage
   max_allocated_storage = var.db_max_allocated_storage
 
   # Database Configuration
@@ -56,10 +56,10 @@ module "rds" {
   kms_key_id        = var.kms_key_arn
 
   # Backup Configuration
-  backup_retention_period = var.backup_retention_days
-  backup_window           = "03:00-04:00"
-  maintenance_window      = "mon:04:00-mon:05:00"
-  skip_final_snapshot     = false
+  backup_retention_period          = var.backup_retention_days
+  backup_window                    = "03:00-04:00"
+  maintenance_window               = "mon:04:00-mon:05:00"
+  skip_final_snapshot              = false
   final_snapshot_identifier_prefix = "${var.project_name}-db-${var.environment}-final-"
 
   # Performance Insights
@@ -72,8 +72,8 @@ module "rds" {
 
   # Monitoring
   #enabled_cloudwatch_logs_exports = ["postgresql"]
-  monitoring_interval             = 60
-  monitoring_role_arn             = aws_iam_role.rds_monitoring.arn
+  monitoring_interval = 60
+  monitoring_role_arn = aws_iam_role.rds_monitoring.arn
 
   # DeletionProtection
   deletion_protection = true

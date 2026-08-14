@@ -17,9 +17,9 @@ module "eks" {
   enable_irsa = true
 
   # Control Plane Logging
-  cluster_enabled_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  cluster_enabled_log_types              = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
   cloudwatch_log_group_retention_in_days = 30
-  cloudwatch_log_group_kms_key_id = var.kms_key_arn
+  cloudwatch_log_group_kms_key_id        = var.kms_key_arn
 
   # Encryption
   cluster_encryption_config = {
@@ -76,7 +76,7 @@ module "eks" {
       })
     }
     aws-ebs-csi-driver = {
-      most_recent = true
+      most_recent              = true
       service_account_role_arn = var.ebs_csi_role_arn
     }
   }
@@ -171,10 +171,10 @@ resource "kubernetes_storage_class" "ebs_gp3" {
   reclaim_policy      = "Delete"
 
   parameters = {
-    type      = "gp3"
-    iops      = "3000"
+    type       = "gp3"
+    iops       = "3000"
     throughput = "125"
-    encrypted = "true"
+    encrypted  = "true"
     kms_key_id = var.kms_key_arn
   }
 
@@ -194,10 +194,10 @@ resource "kubernetes_storage_class" "ebs_gp3_default" {
   reclaim_policy      = "Delete"
 
   parameters = {
-    type      = "gp3"
-    iops      = "3000"
+    type       = "gp3"
+    iops       = "3000"
     throughput = "125"
-    encrypted = "true"
+    encrypted  = "true"
     kms_key_id = var.kms_key_arn
   }
 
