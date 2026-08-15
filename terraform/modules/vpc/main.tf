@@ -7,6 +7,8 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.5.0"
 
+  map_public_ip_on_launch = true
+
   name = "${var.project_name}-vpc-${var.environment}"
   cidr = var.vpc_cidr
 

@@ -172,6 +172,30 @@ resource "aws_s3_bucket_policy" "central_logs" {
         }
         Action   = "s3:PutObject"
         Resource = "${aws_s3_bucket.central_logs.arn}/*"
+      },
+      {
+        Sid    = "AllowGuardDutyGetBucketLocation"
+        Effect = "Allow"
+
+        Principal = {
+          Service = "guardduty.amazonaws.com"
+        }
+
+        Action = "s3:GetBucketLocation"
+
+        Resource = aws_s3_bucket.guardduty.arn
+      },
+      {
+        Sid    = "AllowGuardDutyPutObject"
+        Effect = "Allow"
+
+        Principal = {
+          Service = "guardduty.amazonaws.com"
+        }
+
+        Action = "s3:PutObject"
+
+        Resource = "${aws_s3_bucket.guardduty.arn}/*"
       }
     ]
   })
