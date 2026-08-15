@@ -19,18 +19,18 @@ resource "aws_kms_key" "main" {
         Resource = "*"
       },
       {
-        "Sid": "AllowCloudWatchLogs",
-        "Effect": "Allow",
-        "Principal": {
-        "Service": "logs.us-east-1.amazonaws.com"
+        "Sid" : "AllowCloudWatchLogs",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "logs.us-east-1.amazonaws.com"
         },
-        "Action": [
+        "Action" : [
           "kms:Encrypt",
           "kms:Decrypt",
           "kms:GenerateDataKey*",
           "kms:DescribeKey"
         ],
-        "Resource": "*"
+        "Resource" : "*"
       },
       {
         Sid    = "Allow CloudTrail to encrypt logs"
