@@ -172,9 +172,9 @@ jobs:
           fi
         working-directory: ./terraform
 
-			- name: Update Kubeconfig
-			  run: |
-				  aws eks update-kubeconfig --name enterprise-eks-prod --region us-east-1
+      - name: Update Kubeconfig
+        run: |
+          aws eks update-kubeconfig --name enterprise-eks-prod --region us-east-1
         
       - name: Configure Kubeconfig & Verify Cluster
         if: inputs.action != 'destroy'
