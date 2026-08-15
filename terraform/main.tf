@@ -272,7 +272,7 @@ resource "aws_route53_record" "app_alias" {
   zone_id = aws_route53_zone.primary.zone_id
   name = "app.enterprise.local"
   type = "A"
-   
+
   alias {
     name = data.aws_lb.ingress.dns_name
     zone_id = data.aws_lb.ingress.zone_id
