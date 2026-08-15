@@ -286,7 +286,7 @@ resource "aws_route53_record" "app_alias" {
 
 
 module "external_dns_irsa" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
   role_name = "external-dns"
 
