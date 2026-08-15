@@ -31,7 +31,7 @@ resource "aws_kms_key" "main" {
           "kms:DescribeKey"
         ],
         "Resource": "*"
-      }
+      },
       {
         Sid    = "Allow CloudTrail to encrypt logs"
         Effect = "Allow"
