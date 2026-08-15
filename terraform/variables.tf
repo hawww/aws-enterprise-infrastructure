@@ -4,6 +4,11 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "deploy_k8s_resources" {
+  type = bool
+  default = false
+}
+
 variable "aws_region_dr" {
   description = "AWS region for disaster recovery"
   type        = string
