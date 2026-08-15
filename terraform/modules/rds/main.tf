@@ -1,3 +1,15 @@
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+
+      configuration_aliases = [
+        aws.dr
+      ]
+    }
+  }
+}
+
 # Security Group for RDS
 resource "aws_security_group" "rds" {
   name_prefix = "rds-"
