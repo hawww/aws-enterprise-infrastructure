@@ -285,23 +285,6 @@ resource "aws_route53_record" "app_alias" {
 
 
 
-module "external_dns_irsa" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-
-  role_name = "external-dns"
-
-  role_policy_arns = {
-    external_dns = aws_iam_policy.external_dns.arn
-  }
-
-  oidc_providers = {
-    main = {
-      provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:external-dns"]
-    }
-  }
-}
-
 
 resource "helm_release" "external_dns" {
   name       = "external-dns"
@@ -326,7 +309,7 @@ resource "helm_release" "external_dns" {
 
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.external_dns_irsa.iam_role_arn
+    value = module.iam.external_dns_irsa.iam_role_arn
   }
 
   set {
