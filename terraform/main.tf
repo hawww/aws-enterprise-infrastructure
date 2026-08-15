@@ -25,7 +25,10 @@ locals {
 
 module "addons" {
   source = "./modules/addons"
-
+  
+  depends_on = [
+    module.eks
+  ]
   cluster_name = module.eks.cluster_name
   aws_region   = var.aws_region
 
