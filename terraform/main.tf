@@ -267,6 +267,9 @@ resource "aws_route53_zone" "primary" {
 #  )
 #}
 
+data "aws_lb" "ingress" {
+  name = "actual-alb-name"
+}
 
 resource "aws_route53_record" "app_alias" {
   zone_id = aws_route53_zone.primary.zone_id
@@ -277,6 +280,25 @@ resource "aws_route53_record" "app_alias" {
     name                   = data.aws_lb.ingress.dns_name
     zone_id                = data.aws_lb.ingress.zone_id
     evaluate_target_health = true
+  }
+}
+
+
+
+module "external_dns_irsa" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+
+  role_name = "external-dns"
+
+  role_policy_arns = {
+    external_dns = aws_iam_policy.external_dns.arn
+  }
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:external-dns"]
+    }
   }
 }
 
