@@ -267,9 +267,9 @@ resource "aws_route53_zone" "primary" {
 #  )
 #}
 
-data "aws_lb" "ingress" {
-  name = "aws-load-balancer-controller"
-}
+#data "aws_lb" "ingress" {
+#  name = "aws-load-balancer-controller"
+#}
 
 
 data "kubernetes_ingress_v1" "app" {
