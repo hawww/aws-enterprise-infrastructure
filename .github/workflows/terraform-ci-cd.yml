@@ -167,7 +167,7 @@ jobs:
             terraform destroy -auto-approve
           else
             echo "🚀 Executing Terraform Apply..."
-            terraform apply -auto-approve tfplan -var="deploy_k8s_resources=true"
+            terraform apply -auto-approve  -var="deploy_k8s_resources=true"
           fi
         working-directory: ./terraform
 
