@@ -268,19 +268,32 @@ resource "aws_route53_zone" "primary" {
 #}
 
 data "aws_lb" "ingress" {
-  name = "actual-alb-name"
+  name = "aws-load-balancer-controller"
+}
+
+
+data "kubernetes_ingress_v1" "app" {
+  metadata {
+    name = "app-ingress"
+    namespace = "default"
+  }
 }
 
 resource "aws_route53_record" "app_alias" {
   zone_id = aws_route53_zone.primary.zone_id
   name    = "app.enterprise.local"
   type    = "A"
+  ttl = 300
 
-  alias {
-    name                   = data.aws_lb.ingress.dns_name
-    zone_id                = data.aws_lb.ingress.zone_id
-    evaluate_target_health = true
-  }
+  records = [
+    data.kubernetes_ingress_v1.app.status[0].load_balancer[0].ingress[0].hostname
+  ]
+
+  #alias {
+  #  name                   = data.aws_lb.ingress.dns_name
+  #  zone_id                = data.aws_lb.ingress.zone_id
+  #  evaluate_target_health = true
+  #}
 }
 
 
