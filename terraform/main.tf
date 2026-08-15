@@ -304,6 +304,7 @@ resource "helm_release" "external_dns" {
   }
 }
 
+
 resource "aws_route53_record" "app_alias" {
   zone_id = aws_route53_zone.primary.zone_id
   name = "app.enterprise.local"
