@@ -276,13 +276,15 @@ resource "aws_route53_zone" "primary" {
 
 
 
-
 resource "helm_release" "external_dns" {
   name       = "external-dns"
   repository = "https://kubernetes-sigs.github.io/external-dns/"
   chart      = "external-dns"
   namespace  = "kube-system"
 
+  depends_on = [
+    module.eks
+  ]
   set {
     name  = "provider.name"
     value = "aws"

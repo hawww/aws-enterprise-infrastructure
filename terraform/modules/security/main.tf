@@ -10,6 +10,25 @@ resource "aws_kms_key" "main" {
     Version = "2012-10-17"
     Statement = [
       {
+        Sid    = "AllowGuardDutyKeyUsage"
+        Effect = "Allow"
+
+        Principal = {
+          Service = "guardduty.amazonaws.com"
+        }
+
+        Action = [
+          "kms:GenerateDataKey",
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncryptTo",
+          "kms:ReEncryptFrom",
+          "kms:DescribeKey"
+        ]
+
+        Resource = "*"
+      },
+      {
         Sid    = "Enable IAM policies"
         Effect = "Allow"
         Principal = {
