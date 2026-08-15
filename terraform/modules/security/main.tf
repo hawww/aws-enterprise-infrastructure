@@ -19,6 +19,20 @@ resource "aws_kms_key" "main" {
         Resource = "*"
       },
       {
+        Sid    = "AllowGuardDuty"
+        Effect = "Allow"
+        Principal = {
+          Service = "guardduty.amazonaws.com"
+        }
+        Action = [
+          "kms:GenerateDataKey",
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:DescribeKey"
+        ]
+        Resource = "*"
+      },
+      {
         "Sid" : "AllowCloudWatchLogs",
         "Effect" : "Allow",
         "Principal" : {

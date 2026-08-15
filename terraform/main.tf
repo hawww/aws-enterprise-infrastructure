@@ -267,14 +267,51 @@ resource "aws_route53_zone" "primary" {
 #  )
 #}
 
+resource "helm_release" "external_dns" {
+  name       = "external-dns"
+  repository = "https://kubernetes-sigs.github.io/external-dns/"
+  chart      = "external-dns"
+  namespace  = "kube-system"
+
+  set {
+    name  = "provider.name"
+    value = "aws"
+  }
+
+  set {
+    name  = "serviceAccount.create"
+    value = "true"
+  }
+
+  set {
+    name  = "serviceAccount.name"
+    value = "external-dns"
+  }
+
+  set {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = module.external_dns_irsa.iam_role_arn
+  }
+
+  set {
+    name  = "domainFilters[0]"
+    value = "enterprise.local"
+  }
+
+  set {
+    name  = "policy"
+    value = "sync"
+  }
+}
+
 resource "aws_route53_record" "app_alias" {
   zone_id = aws_route53_zone.primary.zone_id
-  name    = "app"
-  type    = "A"
-
+  name = "app.enterprise.local"
+  type = "A"
+   
   alias {
-    name                   = aws_route53_zone.primary.name
-    zone_id                = aws_route53_zone.primary.zone_id
+    name = data.aws_lb.ingress.dns_name
+    zone_id = data.aws_lb.ingress.zone_id
     evaluate_target_health = true
   }
 }
