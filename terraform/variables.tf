@@ -5,7 +5,7 @@ variable "aws_region" {
 }
 
 variable "deploy_k8s_resources" {
-  type = bool
+  type    = bool
   default = false
 }
 
