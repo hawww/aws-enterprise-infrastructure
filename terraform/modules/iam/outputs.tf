@@ -17,3 +17,7 @@ output "cluster_autoscaler_role_arn" {
   description = "ARN of the Cluster Autoscaler IAM role"
   value       = aws_iam_role.cluster_autoscaler.arn
 }
+
+output "external_dns_irsa_role_arn" {
+  value = module.external_dns_irsa.iam_role_arn
+}

@@ -309,7 +309,7 @@ resource "helm_release" "external_dns" {
 
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.iam.external_dns_irsa.iam_role_arn
+    value = module.iam.external_dns_irsa_role_arn
   }
 
   set {
