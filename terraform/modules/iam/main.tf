@@ -25,12 +25,12 @@ module "external_dns_irsa" {
   role_name = "external-dns"
 
   role_policy_arns = {
-    external_dns = aws_iam_policy.external_dns.arn
+    kms_decrypt = aws_iam_policy.kms_decrypt.arn
   }
 
   oidc_providers = {
     main = {
-      provider_arn               = module.eks.oidc_provider_arn
+      provider_arn               = var.cluster_oidc_provider_arn
       namespace_service_accounts = ["kube-system:external-dns"]
     }
   }
