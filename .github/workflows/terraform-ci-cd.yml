@@ -168,6 +168,7 @@ jobs:
           else
             echo "🚀 Executing Terraform Apply..."
             terraform apply -auto-approve  -var="deploy_k8s_resources=true" -var="db_password=MyStrongPassword123!"
+            terraform apply -auto-approve  -var="deploy_k8s_resources=false"  -var="db_password=MyStrongPassword123!"
           fi
         working-directory: ./terraform
 
