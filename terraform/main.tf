@@ -111,7 +111,7 @@ resource "kubernetes_storage_class" "ebs_gp3" {
     iops       = "3000"
     throughput = "125"
     encrypted  = "true"
-    kms_key_id = var.kms_key_arn
+    kms_key_id = module.security.kms_key_arn
   }
 
   depends_on = [module.eks]
