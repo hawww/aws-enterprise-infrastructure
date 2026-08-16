@@ -165,6 +165,8 @@ jobs:
       - name: Apply Infrastructure
         env:
           TF_LOG: DEBUG
+          AWS_TYPES_INTERACTIVE: false
+          AWS_EC2_METADATA_DISABLED: true
         run: |
           if ! terraform state show module.addons.aws_eks_addon.ebs_csi > /dev/null 2>&1; then
             echo "Importing EBS CSI addon..."
