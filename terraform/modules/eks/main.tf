@@ -52,7 +52,7 @@ module "eks" {
       tags = {
         "NodeGroup" = "general"
 
-        "k8s.io/cluster-autoscaler/enabled"             = "true"
+        "k8s.io/cluster-autoscaler/enabled" = "true"
         "k8s.io/cluster-autoscaler/${var.cluster_name}" = "owned"
       }
 
@@ -89,9 +89,28 @@ module "eks" {
   tags = var.tags
 }
 
+
+resource "null_resource" "wait_for_k8s_nodes" {
+
+  provisioner "local-exec" {
+    command = <<EOT
+kubectl wait \
+  --for=condition=Ready \
+  node \
+  --all \
+  --timeout=10m
+EOT
+  }
+}
+
+
 # Enable Auto Scaling for the EKS cluster
 resource "aws_autoscaling_group_tag" "cluster_autoscaler_discovery" {
   for_each = module.eks.eks_managed_node_groups
+
+  depends_on = [
+    null_resource.wait_for_k8s_nodes
+  ]
 
   autoscaling_group_name = each.value.node_group_autoscaling_group_names[0]
 
@@ -147,7 +166,13 @@ resource "aws_autoscaling_group_tag" "cluster_autoscaler_discovery" {
 #  depends_on = [helm_release.aws_load_balancer_controller]
 #}
 
+data "aws_eks_access_entry" "existing" {
+  cluster_name  = module.eks.cluster_name
+  principal_arn = "arn:aws:iam::980825417634:root"
+}
+
 resource "aws_eks_access_entry" "terraform" {
+  count = data.aws_eks_access_entry.existing.id == "" ? 1 : 0
   cluster_name  = module.eks.cluster_name
   principal_arn = "arn:aws:iam::980825417634:root"
   type          = "STANDARD"
