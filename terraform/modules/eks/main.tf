@@ -151,10 +151,10 @@ resource "aws_autoscaling_group_tag" "cluster_autoscaler_discovery" {
 #  depends_on = [helm_release.aws_load_balancer_controller]
 #}
 
-data "aws_eks_access_entry" "existing" {
-  cluster_name  = module.eks.cluster_name
-  principal_arn = "arn:aws:iam::980825417634:root"
-}
+#data "aws_eks_access_entry" "existing" {
+#  cluster_name  = module.eks.cluster_name
+#  principal_arn = "arn:aws:iam::980825417634:root"
+#}
 
 resource "aws_eks_access_entry" "terraform" {
   #count         = data.aws_eks_access_entry.existing.id == "" ? 1 : 0
