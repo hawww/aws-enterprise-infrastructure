@@ -63,8 +63,8 @@ jobs:
 
       - name: Remove Terraform Cache
         run: |
-          #rm -rf .terraform
-          #rm -f .terraform.lock.hcl
+          rm -rf .terraform
+          rm -f .terraform.lock.hcl
 
       - name: Terraform Init
         run: terraform init #-reconfigure
