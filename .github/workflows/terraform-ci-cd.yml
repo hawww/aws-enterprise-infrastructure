@@ -136,7 +136,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tf-plan-${{ github.sha }}
-          path: terraform/tfplan
+          path: |
+            terraform/tfplan
+            terraform/tfplan2
 
   terraform-apply:
     name: "3. Terraform Apply & Deploy Workflows"
