@@ -211,7 +211,7 @@ jobs:
             terraform state rm 'module.eks.module.eks.aws_cloudwatch_log_group.this[0]' || true
             terraform import 'module.eks.module.eks.module.kms.aws_kms_alias.this["cluster"]' alias/eks/enterprise-eks-prod
             terraform import module.eks.module.eks.aws_cloudwatch_log_group.this[0] "/aws/eks/enterprise-eks-prod/cluster"
-
+            erraform import 'module.eks.module.eks.aws_eks_cluster.this[0]' enterprise-eks-prod
             
             terraform apply -target=module.eks -target=module.addons -auto-approve
             aws eks update-kubeconfig --region ${{ vars.AWS_REGION }} --name $EKS_CLUSTER_NAME
