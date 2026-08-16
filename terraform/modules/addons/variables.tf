@@ -6,3 +6,7 @@ variable "cluster_autoscaler_role_arn" {}
 variable "aws_region" {
   type = string
 }
+
+variable "aws_region" {
+  type = string
+}

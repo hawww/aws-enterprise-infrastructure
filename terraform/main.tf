@@ -26,9 +26,6 @@ locals {
 module "addons" {
   source = "./modules/addons"
 
-  depends_on = [
-    module.eks
-  ]
   cluster_name = module.eks.cluster_name
   aws_region   = var.aws_region
 
@@ -77,6 +74,10 @@ module "iam" {
 # Module 4: EKS Cluster with add-ons and Helm providers
 module "eks" {
   source = "./modules/eks"
+
+  depends_on = [
+    module.addons
+  ]
 
   project_name            = var.project_name
   environment             = var.environment

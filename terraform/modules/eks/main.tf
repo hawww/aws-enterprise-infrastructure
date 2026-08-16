@@ -167,6 +167,7 @@ resource "kubernetes_storage_class" "ebs_gp3" {
     name = "ebs-gp3"
   }
 
+
   storage_provisioner = "ebs.csi.aws.com"
   reclaim_policy      = "Delete"
 
