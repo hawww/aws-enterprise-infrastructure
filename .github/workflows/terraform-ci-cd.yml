@@ -162,6 +162,12 @@ jobs:
         run: terraform workspace select -or-create prod
         working-directory: ./terraform
 
+      - name: Wait for EKS nodegroup
+        run: |
+          aws eks wait nodegroup-active \
+            --cluster-name enterprise-eks-prod \
+            --nodegroup-name enterprise-general-ng-20260816032925688900000001
+        
       - name: Apply Infrastructure
         env:
           TF_LOG: DEBUG
