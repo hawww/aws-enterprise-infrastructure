@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    null = {
+      source = "hashicorp/null"
+      version = "~> 3.2"
+    }
+  }
+}
+
+
 resource "aws_eks_addon" "ebs_csi" {
   cluster_name             = var.cluster_name
   addon_name               = "aws-ebs-csi-driver"
