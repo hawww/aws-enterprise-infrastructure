@@ -52,7 +52,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
  
-          
+
       - name: Select Default Workspace
         run: |
           aws s3 rm s3://enterprise-tfstate-us-east-1/env:/prod/enterprise-infra/terraform.tfstate
@@ -124,6 +124,7 @@ jobs:
         id: plan
         run: |
           export TF_VAR_db_password='MyStrongPassword123!'
+          terraform apply -target=module.eks
           terraform plan -no-color -out=tfplan -parallelism=1 -var="db_password=MyStrongPassword123!"
         working-directory: ./terraform
 
