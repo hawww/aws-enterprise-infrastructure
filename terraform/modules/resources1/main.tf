@@ -5,11 +5,6 @@ resource "kubernetes_manifest" "user_service" {
 
   #depends_on = [kubernetes_namespace.default, module.eks]
 
-  depends_on = [
-    module.eks,
-    module.addons,
-    kubernetes_storage_class.ebs_gp3
-  ]
 }
 
 
@@ -19,11 +14,6 @@ resource "kubernetes_manifest" "user_service1" {
 
   #depends_on = [kubernetes_namespace.default, module.eks]
 
-  depends_on = [
-    module.eks,
-    module.addons,
-    kubernetes_storage_class.ebs_gp3
-  ]
 }
 
 
@@ -33,11 +23,6 @@ resource "kubernetes_manifest" "user_service2" {
 
   #depends_on = [kubernetes_namespace.default, module.eks]
 
-  depends_on = [
-    module.eks,
-    module.addons,
-    kubernetes_storage_class.ebs_gp3
-  ]
 }
 
 
@@ -47,11 +32,6 @@ resource "kubernetes_manifest" "user_service3" {
 
   #depends_on = [kubernetes_namespace.default, module.eks]
 
-  depends_on = [
-    module.eks,
-    module.addons,
-    kubernetes_storage_class.ebs_gp3
-  ]
 }
 
 
@@ -61,11 +41,6 @@ resource "kubernetes_manifest" "user_service4" {
 
   #depends_on = [kubernetes_namespace.default, module.eks]
 
-  depends_on = [
-    module.eks,
-    module.addons,
-    kubernetes_storage_class.ebs_gp3
-  ]
 }
 
 
@@ -75,11 +50,6 @@ resource "kubernetes_manifest" "order_service" {
 
   #depends_on = [kubernetes_namespace.default, module.eks]
 
-  depends_on = [
-    module.eks,
-    module.addons,
-    kubernetes_storage_class.ebs_gp3
-  ]
 }
 
 
