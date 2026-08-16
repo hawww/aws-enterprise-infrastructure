@@ -91,6 +91,7 @@ variable "db_password" {
   description = "Master password for RDS PostgreSQL"
   type        = string
   sensitive   = true
+  default     = "MyStrongPassword123!"
 }
 
 variable "db_instance_class" {
