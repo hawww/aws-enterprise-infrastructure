@@ -332,8 +332,6 @@ resource "kubernetes_manifest" "order_service1" {
   #depends_on = [kubernetes_namespace.default, module.eks]
 
   depends_on = [
-    module.eks,
-    module.addons,
     kubernetes_storage_class.ebs_gp3
   ]
 }
@@ -346,8 +344,6 @@ resource "kubernetes_manifest" "order_service2" {
   #depends_on = [kubernetes_namespace.default, module.eks]
 
   depends_on = [
-    module.eks,
-    module.addons,
     kubernetes_storage_class.ebs_gp3
   ]
 }
@@ -360,8 +356,6 @@ resource "kubernetes_manifest" "order_service3" {
   #depends_on = [kubernetes_namespace.default, module.eks]
 
   depends_on = [
-    module.eks,
-    module.addons,
     kubernetes_storage_class.ebs_gp3
   ]
 }
@@ -374,8 +368,6 @@ resource "kubernetes_manifest" "order_service4" {
   #depends_on = [kubernetes_namespace.default, module.eks]
 
   depends_on = [
-    module.eks,
-    module.addons,
     kubernetes_storage_class.ebs_gp3
   ]
 }
@@ -387,8 +379,6 @@ resource "kubernetes_manifest" "ingress" {
   #depends_on = [kubernetes_namespace.default, module.eks, module.monitoring]
 
   depends_on = [
-    module.eks,
-    module.addons,
     kubernetes_storage_class.ebs_gp3
   ]
 }
@@ -400,8 +390,6 @@ resource "kubernetes_manifest" "ingress1" {
   #depends_on = [kubernetes_namespace.default, module.eks, module.monitoring]
 
   depends_on = [
-    module.eks,
-    module.addons,
     kubernetes_storage_class.ebs_gp3
   ]
 }
