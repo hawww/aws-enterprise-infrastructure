@@ -110,18 +110,18 @@ jobs:
         run: terraform validate
         working-directory: ./terraform
         
-      #- name: Delete existing EKS cluster if present
-      #  run: |
-      #    if aws eks describe-cluster --name enterprise-eks-prod --region us-east-1 >/dev/null 2>&1; then
-      #      echo "Deleting EKS cluster..."
-      #      aws eks delete-cluster --name enterprise-eks-prod --region us-east-1
-      #
-      #      aws eks wait cluster-deleted --name enterprise-eks-prod --region us-east-1
-      #
-      #      echo "Cluster deleted."
-      #    else
-      #      echo "Cluster does not exist."
-      #    fi
+      - name: Delete existing EKS cluster if present
+        run: |
+          if aws eks describe-cluster --name enterprise-eks-prod --region us-east-1 >/dev/null 2>&1; then
+            echo "Deleting EKS cluster..."
+            aws eks delete-cluster --name enterprise-eks-prod --region us-east-1
+      
+            aws eks wait cluster-deleted --name enterprise-eks-prod --region us-east-1
+      
+            echo "Cluster deleted."
+          else
+            echo "Cluster does not exist."
+          fi
 
       - name: Terraform Plan
         env:
