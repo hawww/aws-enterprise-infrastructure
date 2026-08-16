@@ -1,5 +1,11 @@
+data "aws_cloudwatch_log_group" "existing" {
+  name = "/aws/eks/${var.cluster_name}/cluster"
+}
+
 # CloudWatch Log Group for EKS Cluster Logs
 resource "aws_cloudwatch_log_group" "eks_cluster" {
+  count = length(try(data.aws_cloudwatch_log_group.existing.arn, "")) > 0 ? 0 : 1
+  
   name              = "/aws/eks/${var.cluster_name}"
   retention_in_days = var.log_retention_days
 
