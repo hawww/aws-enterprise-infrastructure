@@ -104,7 +104,7 @@ module "iam" {
 module "eks" {
   source = "./modules/eks"
 
-  count = var.deploy_k8s_resources ? 1 : 0
+  #count = var.deploy_k8s_resources ? 1 : 0
 
   cluster_name = "${var.project_name}-eks-${var.environment}"
 
@@ -141,7 +141,7 @@ data "aws_eks_cluster_auth" "cluster" {
 module "rds" {
   source = "./modules/rds"
 
-  count = var.deploy_k8s_resources ? 1 : 0
+  #count = var.deploy_k8s_resources ? 1 : 0
 
   providers = {
     aws    = aws
