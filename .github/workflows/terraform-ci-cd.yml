@@ -110,37 +110,37 @@ jobs:
         run: terraform validate
         working-directory: ./terraform
         
-      - name: Delete existing EKS cluster if present
-        run: |
-          set +e
+      # - name: Delete existing EKS cluster if present
+      #   run: |
+      #     set +e
 
-          if aws eks describe-cluster --name enterprise-eks-prod --region us-east-1 >/dev/null 2>&1 || false; then
+      #     if aws eks describe-cluster --name enterprise-eks-prod --region us-east-1 >/dev/null 2>&1 || false; then
           
-            for ng in $(aws eks list-nodegroups \
-              --cluster-name enterprise-eks-prod \
-              --region us-east-1 \
-              --query 'nodegroups[]' \
-              --output text); do
-              echo "Deleting $ng"
-              aws eks delete-nodegroup \
-                --cluster-name enterprise-eks-prod \
-                --nodegroup-name "$ng" \
-                --region us-east-1
-            done
-          fi
+      #       for ng in $(aws eks list-nodegroups \
+      #         --cluster-name enterprise-eks-prod \
+      #         --region us-east-1 \
+      #         --query 'nodegroups[]' \
+      #         --output text); do
+      #         echo "Deleting $ng"
+      #         aws eks delete-nodegroup \
+      #           --cluster-name enterprise-eks-prod \
+      #           --nodegroup-name "$ng" \
+      #           --region us-east-1
+      #       done
+      #     fi
 
-          if aws eks describe-cluster --name enterprise-eks-prod --region us-east-1 >/dev/null 2>&1 || false; then
-            echo "Deleting EKS cluster..."
-            aws eks delete-cluster --name enterprise-eks-prod --region us-east-1
+      #     if aws eks describe-cluster --name enterprise-eks-prod --region us-east-1 >/dev/null 2>&1 || false; then
+      #       echo "Deleting EKS cluster..."
+      #       aws eks delete-cluster --name enterprise-eks-prod --region us-east-1
       
-            aws eks wait cluster-deleted --name enterprise-eks-prod --region us-east-1
+      #       aws eks wait cluster-deleted --name enterprise-eks-prod --region us-east-1
       
-            echo "Cluster deleted."
-          else
-            echo "Cluster does not exist."
-          fi
+      #       echo "Cluster deleted."
+      #     else
+      #       echo "Cluster does not exist."
+      #     fi
 
-          set -e
+      #     set -e
 
       - name: Terraform Plan
         env:
