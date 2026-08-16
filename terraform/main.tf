@@ -45,7 +45,7 @@ module "addons" {
   source = "./modules/addons"
 
   providers = {
-    helm = helm
+    helm       = helm
     kubernetes = kubernetes
   }
 
@@ -99,7 +99,7 @@ module "eks" {
   source = "./modules/eks"
 
   providers = {
-    helm = helm
+    helm       = helm
     kubernetes = kubernetes
   }
 
