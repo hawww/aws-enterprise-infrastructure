@@ -38,9 +38,24 @@ jobs:
         with:
           terraform_version: 1.13.0
 
-      - name: Select Default Workspace
+
+      - name: Delete existing
         run: |
           terraform workspace select -or-create prod
+          terraform destroy -auto-approve
+
+
+      - name: Select Default Workspace
+        run: |
+          aws s3 rm s3://enterprise-tfstate-us-east-1/env:/prod/enterprise-infra/terraform.tfstate
+          for id in $(aws dynamodb scan \
+          --table-name enterprise-tflock \
+          --query 'Items[].LockID.S' \
+          --output text); do
+          aws dynamodb delete-item \
+          --table-name enterprise-tflock \
+          --key "{\"LockID\":{\"S\":\"$id\"}}"
+          done
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
