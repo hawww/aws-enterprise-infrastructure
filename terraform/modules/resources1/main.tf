@@ -1,4 +1,33 @@
 
+
+data "aws_eks_cluster" "this" {
+  name = "enterprise-eks-prod"
+}
+
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = "enterprise-eks-prod"
+}
+
+
+
+# Configure Kubernetes Provider
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.this.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
+}
+
+
+provider "helm" {
+  kubernetes {
+    host                   = data.aws_eks_cluster.this.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.cluster.token
+  }
+}
+
+
 resource "kubernetes_manifest" "user_service" {
   #count    = var.deploy_k8s_resources ? 1 : 0
   manifest = yamldecode(file("${path.module}/../../k8s-manifests/microservice-user.yaml"))
