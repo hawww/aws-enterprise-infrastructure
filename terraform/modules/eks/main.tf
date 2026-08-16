@@ -90,31 +90,10 @@ module "eks" {
 }
 
 
-resource "null_resource" "wait_for_k8s_nodes" {
-  depends_on = [module.eks]
-
-  provisioner "local-exec" {
-    command = <<EOT
-aws eks update-kubeconfig \
-  --name ${module.eks.cluster_name} \
-  --region ${var.aws_region}
-
-kubectl wait \
-  --for=condition=Ready \
-  node \
-  --all \
-  --timeout=10m
-EOT
-  }
-}
 
 # Enable Auto Scaling for the EKS cluster
 resource "aws_autoscaling_group_tag" "cluster_autoscaler_discovery" {
   for_each = module.eks.eks_managed_node_groups
-
-  depends_on = [
-    null_resource.wait_for_k8s_nodes
-  ]
 
   autoscaling_group_name = each.value.node_group_autoscaling_group_names[0]
 
