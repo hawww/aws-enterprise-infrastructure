@@ -104,6 +104,8 @@ module "iam" {
 module "eks" {
   source = "./modules/eks"
 
+  count = var.deploy_k8s_resources ? 1 : 0
+
   cluster_name = "${var.project_name}-eks-${var.environment}"
 
   project_name            = var.project_name
@@ -138,6 +140,9 @@ data "aws_eks_cluster_auth" "cluster" {
 # Module 5: RDS Multi-AZ Database
 module "rds" {
   source = "./modules/rds"
+
+  count = var.deploy_k8s_resources ? 1 : 0
+
   providers = {
     aws    = aws
     aws.dr = aws.dr
@@ -301,7 +306,7 @@ resource "aws_route53_record" "app_alias" {
 module "resources1" {
   source = "./modules/resources1"
 
-  count = var.deploy_k8s_resources ? 1 : 0
+  #count = var.deploy_k8s_resources ? 1 : 0
 
   modulesecuritykms_key_arn = module.security.kms_key_arn
 
