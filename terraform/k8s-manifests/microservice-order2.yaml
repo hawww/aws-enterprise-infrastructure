@@ -4,7 +4,7 @@ metadata:
   name: order-service-pdb
   namespace: default
 spec:
-  minAvailable:0
+  minAvailable: 0
   selector:
     matchLabels:
       app: order-service
