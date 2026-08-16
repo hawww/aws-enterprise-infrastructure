@@ -170,8 +170,9 @@ jobs:
           else
             echo "🚀 Executing Terraform Apply..."
             terraform import module.addons.aws_eks_addon.ebs_csi enterprise-eks-prod:aws-ebs-csi-driver
-            terraform apply -auto-approve  -var="deploy_k8s_resources=false" -var="db_password=MyStrongPassword123!"
-            terraform apply -auto-approve  -var="deploy_k8s_resources=true"  -var="db_password=MyStrongPassword123!"
+            #terraform apply -auto-approve  -var="deploy_k8s_resources=false" -var="db_password=MyStrongPassword123!"
+            #terraform apply -auto-approve  -var="deploy_k8s_resources=true"  -var="db_password=MyStrongPassword123!"
+            terraform apply -auto-approve tfplan
           fi
         working-directory: ./terraform
 
