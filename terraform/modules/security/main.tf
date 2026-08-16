@@ -137,6 +137,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "logs_lifecycle" {
     id     = "archive_old_logs"
     status = "Enabled"
 
+    filter {
+      prefix = ""
+    }
+
     transition {
       days          = 90
       storage_class = "GLACIER"

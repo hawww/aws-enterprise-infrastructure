@@ -68,6 +68,8 @@ module "security" {
   create_securityhub_org_admin = var.create_securityhub_org_admin
 
   tags = local.common_tags
+
+  cluster_name = "${var.project_name}-eks-${var.environment}"
 }
 
 # Module 2: VPC with Multi-AZ design
@@ -102,6 +104,8 @@ module "eks" {
     helm       = helm
     kubernetes = kubernetes
   }
+
+  cluster_name = "${var.project_name}-eks-${var.environment}"
 
   project_name            = var.project_name
   environment             = var.environment

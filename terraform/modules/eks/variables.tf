@@ -83,3 +83,8 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "cluster_name" {
+  description = "EKS cluster name"
+  type        = string
+}
