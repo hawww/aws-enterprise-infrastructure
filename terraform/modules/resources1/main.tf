@@ -172,7 +172,6 @@ resource "kubernetes_storage_class" "ebs_gp3" {
     kms_key_id = var.modulesecuritykms_key_arn
   }
 
-  depends_on = [module.eks]
 }
 
 # Set default storage class

@@ -301,5 +301,5 @@ module "resources1" {
 
   modulesecuritykms_key_arn = module.security.kms_key_arn
 
-  #depends_on = [module.eks]
+  depends_on = [module.eks]
 }
