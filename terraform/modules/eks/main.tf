@@ -155,7 +155,7 @@ data "aws_eks_access_entry" "existing" {
 }
 
 resource "aws_eks_access_entry" "terraform" {
-  count         = data.aws_eks_access_entry.existing.id == "" ? 1 : 0
+  #count         = data.aws_eks_access_entry.existing.id == "" ? 1 : 0
   cluster_name  = module.eks.cluster_name
   principal_arn = "arn:aws:iam::980825417634:root"
   type          = "STANDARD"
