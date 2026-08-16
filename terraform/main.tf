@@ -75,9 +75,7 @@ module "iam" {
 module "eks" {
   source = "./modules/eks"
 
-  depends_on = [
-    module.addons
-  ]
+  addon_dependency = module.addons.ebs_csi_addon_arn
 
   project_name            = var.project_name
   environment             = var.environment
