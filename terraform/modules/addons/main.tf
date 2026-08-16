@@ -13,10 +13,10 @@ resource "helm_release" "aws_load_balancer_controller" {
   chart      = "aws-load-balancer-controller"
 
   set {
-    name = "clusterName"
+    name  = "clusterName"
     value = var.cluster_name
   }
-  
+
   set {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
     value = var.alb_controller_role_arn
