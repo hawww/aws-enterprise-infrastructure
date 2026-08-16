@@ -137,7 +137,7 @@ jobs:
         with:
           name: tf-plan-${{ github.sha }}
           path: |
-            terraform/tfplan
+            #terraform/tfplan
             terraform/tfplan2
 
   terraform-apply:
@@ -217,7 +217,8 @@ jobs:
             terraform apply -auto-approve tfplan2
 
             aws eks update-kubeconfig --region ${{ vars.AWS_REGION }} --name $EKS_CLUSTER_NAME
-            
+            terraform plan -no-color -out=tfplan -parallelism=1 -var="deploy_k8s_resources=false" -var="db_password=MyStrongPassword123!"
+
             terraform apply -auto-approve   tfplan
           fi 
         working-directory: ./terraform
