@@ -42,7 +42,7 @@ jobs:
       - name: Delete existing
         run: |
           terraform workspace select -or-create prod
-          #terraform destroy -auto-approve
+          terraform destroy -auto-approve
 
 
       - name: Configure AWS Credentials
