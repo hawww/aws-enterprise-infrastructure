@@ -303,3 +303,4 @@ module "resources1" {
 
   depends_on = [module.eks]
 }
+
