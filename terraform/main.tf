@@ -100,11 +100,6 @@ module "iam" {
 module "eks" {
   source = "./modules/eks"
 
-  providers = {
-    helm       = helm
-    kubernetes = kubernetes
-  }
-
   cluster_name = "${var.project_name}-eks-${var.environment}"
 
   project_name            = var.project_name
