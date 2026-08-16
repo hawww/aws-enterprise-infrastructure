@@ -177,8 +177,6 @@ resource "kubernetes_storage_class" "ebs_gp3_default" {
 
 
 
-
-
 # Module 5: RDS Multi-AZ Database
 module "rds" {
   source = "./modules/rds"

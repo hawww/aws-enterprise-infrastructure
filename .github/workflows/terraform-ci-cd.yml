@@ -166,7 +166,7 @@ jobs:
       #  run: |
       #    aws eks wait nodegroup-active \
       #      --cluster-name enterprise-eks-prod \
-      #      --nodegroup-name enterprise-general-ng-2026081519245200220000000d
+      #       --nodegroup-name enterprise-general-ng-2026081519245200220000000d
         
       - name: Apply Infrastructure
         env:
