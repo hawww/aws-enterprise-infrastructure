@@ -251,7 +251,7 @@ jobs:
             aws eks update-kubeconfig --region ${{ vars.AWS_REGION }} --name $EKS_CLUSTER_NAME
             terraform import 'module.eks.module.eks.aws_eks_cluster.this[0]' enterprise-eks-prod  || true
 
-            terraform plan -target=module.iam -target=module.monitoring -target=module.rds -target=module.resource1 -target=module.security -target=module.vpc -no-color -out=tfplan -parallelism=1 -var="deploy_k8s_resources=false" -var="db_password=MyStrongPassword123!"
+            terraform plan -target=module.iam -target=module.monitoring -target=module.rds -target=module.resource1 -target=module.resource2 -target=module.security -target=module.vpc -no-color -out=tfplan -parallelism=1 -var="deploy_k8s_resources=false" -var="db_password=MyStrongPassword123!"
 
             terraform apply -auto-approve   tfplan
           fi 

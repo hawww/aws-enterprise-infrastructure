@@ -290,3 +290,10 @@ module "resources1" {
   ]
 }
 
+
+
+# Module 3: IAM Roles and Service Accounts (IRSA)
+module "resources2" {
+  source = "./modules/resources2"
+
+}
