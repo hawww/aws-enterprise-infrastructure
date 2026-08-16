@@ -118,8 +118,8 @@ jobs:
           export TF_VAR_db_password='MyStrongPassword123!'
           #terraform apply -target=module.eks
           aws eks update-kubeconfig --name enterprise-eks-prod --region us-east-1
-          terraform import 'module.eks.module.eks.module.kms.aws_kms_alias.this["cluster"]' alias/eks/enterprise-eks-prod
-          terraform import module.eks.module.eks.aws_cloudwatch_log_group.this[0] "/aws/eks/enterprise-eks-prod/cluster"
+          terraform import 'module.eks.module.eks.module.kms.aws_kms_alias.this["cluster"]' alias/eks/enterprise-eks-prod  || true
+          terraform import module.eks.module.eks.aws_cloudwatch_log_group.this[0] "/aws/eks/enterprise-eks-prod/cluster"  || true
           terraform import 'module.eks.module.eks.aws_eks_cluster.this[0]' enterprise-eks-prod  || true
             
           terraform plan -no-color -out=tfplan -parallelism=1 -var="deploy_k8s_resources=false" -var="db_password=MyStrongPassword123!"
@@ -211,9 +211,7 @@ jobs:
             echo "🚀 Executing Terraform Apply..."
             #terraform apply -auto-approve  -var="deploy_k8s_resources=false" -var="db_password=MyStrongPassword123!"
             #terraform apply -auto-approve  -var="deploy_k8s_resources=true"  -var="db_password=MyStrongPassword123!"
-            terraform state rm 'module.eks.module.eks.module.kms.aws_kms_alias.this["cluster"]' || true
-            terraform state rm 'module.eks.module.eks.aws_cloudwatch_log_group.this[0]' || true
-            
+           
             terraform apply -target=module.eks -target=module.addons -auto-approve
 
             aws eks update-kubeconfig --region ${{ vars.AWS_REGION }} --name $EKS_CLUSTER_NAME
