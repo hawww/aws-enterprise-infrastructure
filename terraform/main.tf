@@ -23,8 +23,31 @@ locals {
 }
 
 
+
+# Configure Kubernetes Provider
+provider "kubernetes" {
+  host                   = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
+}
+
+
+provider "helm" {
+  kubernetes {
+    host                   = module.eks.cluster_endpoint
+    cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+    token                  = data.aws_eks_cluster_auth.cluster.token
+  }
+}
+
+
 module "addons" {
   source = "./modules/addons"
+
+  providers = {
+    helm = helm
+    kubernetes = kubernetes
+  }
 
   cluster_name = module.eks.cluster_name
   aws_region   = var.aws_region
@@ -75,6 +98,11 @@ module "iam" {
 module "eks" {
   source = "./modules/eks"
 
+  providers = {
+    helm = helm
+    kubernetes = kubernetes
+  }
+
   project_name            = var.project_name
   environment             = var.environment
   aws_region              = var.aws_region
@@ -100,12 +128,6 @@ data "aws_eks_cluster_auth" "cluster" {
 }
 
 
-# Configure Kubernetes Provider
-provider "kubernetes" {
-  host                   = module.eks.cluster_endpoint
-  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-}
 
 # Storage Class for EBS volumes
 resource "kubernetes_storage_class" "ebs_gp3" {

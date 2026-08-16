@@ -99,14 +99,6 @@ resource "aws_autoscaling_group_tag" "cluster_autoscaler_discovery" {
   }
 }
 
-provider "helm" {
-  kubernetes {
-    host                   = module.eks.cluster_endpoint
-    cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-    token                  = data.aws_eks_cluster_auth.cluster.token
-  }
-}
-
 # Install AWS Load Balancer Controller
 #resource "helm_release" "aws_load_balancer_controller" {
 #  name       = "aws-load-balancer-controller"
