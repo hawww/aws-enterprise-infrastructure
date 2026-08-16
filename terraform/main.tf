@@ -299,5 +299,7 @@ module "resources1" {
 
   count = var.deploy_k8s_resources ? 1 : 0
 
+  modulesecuritykms_key_arn= module.security.kms_key_arn
+
   #depends_on = [module.eks]
 }
