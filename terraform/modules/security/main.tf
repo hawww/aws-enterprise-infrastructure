@@ -183,7 +183,7 @@ resource "aws_s3_bucket_policy" "central_logs" {
 
         Action = "s3:GetBucketLocation"
 
-        Resource = aws_s3_bucket.guardduty.arn
+        Resource = aws_s3_bucket.central_logs.arn
       },
       {
         Sid    = "AllowGuardDutyPutObject"
@@ -195,7 +195,7 @@ resource "aws_s3_bucket_policy" "central_logs" {
 
         Action = "s3:PutObject"
 
-        Resource = "${aws_s3_bucket.guardduty.arn}/*"
+        Resource = "${aws_s3_bucket.central_logs.arn}/*"
       }
     ]
   })
