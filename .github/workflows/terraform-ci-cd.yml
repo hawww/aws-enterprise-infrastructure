@@ -112,6 +112,8 @@ jobs:
         
       - name: Delete existing EKS cluster if present
         run: |
+          set +e
+
           if aws eks describe-cluster --name enterprise-eks-prod --region us-east-1 >/dev/null 2>&1 || false; then
           
             for ng in $(aws eks list-nodegroups \
@@ -137,6 +139,8 @@ jobs:
           else
             echo "Cluster does not exist."
           fi
+
+          set -e
 
       - name: Terraform Plan
         env:
