@@ -161,6 +161,8 @@ jobs:
         working-directory: ./terraform
 
       - name: Apply Infrastructure
+        env:
+          TF_LOG: DEBUG
         run: |
           if [ "${{ inputs.action }}" == "destroy" ]; then
             echo "⚠️ Executing Terraform Destroy..."
