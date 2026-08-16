@@ -24,7 +24,7 @@ locals {
 
 
 data "aws_eks_cluster" "this" {
-  name = module.eks.cluster_endpoint
+  name = module.eks.cluster_name
 }
 
 
