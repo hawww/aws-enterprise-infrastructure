@@ -112,18 +112,20 @@ jobs:
         
       - name: Delete existing EKS cluster if present
         run: |
-          for ng in $(aws eks list-nodegroups \
-            --cluster-name enterprise-eks-prod \
-            --region us-east-1 \
-            --query 'nodegroups[]' \
-            --output text); do
-            echo "Deleting $ng"
-            aws eks delete-nodegroup \
+          if aws eks describe-cluster --name enterprise-eks-prod --region us-east-1 >/dev/null 2>&1; then
+          
+            for ng in $(aws eks list-nodegroups \
               --cluster-name enterprise-eks-prod \
-              --nodegroup-name "$ng" \
-              --region us-east-1
-          done
-
+              --region us-east-1 \
+              --query 'nodegroups[]' \
+              --output text); do
+              echo "Deleting $ng"
+              aws eks delete-nodegroup \
+                --cluster-name enterprise-eks-prod \
+                --nodegroup-name "$ng" \
+                --region us-east-1
+            done
+          fi
 
           if aws eks describe-cluster --name enterprise-eks-prod --region us-east-1 >/dev/null 2>&1; then
             echo "Deleting EKS cluster..."
