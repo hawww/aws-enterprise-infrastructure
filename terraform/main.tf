@@ -95,6 +95,13 @@ module "eks" {
 }
 
 
+# Configure Kubernetes Provider
+provider "kubernetes" {
+  host                   = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
+}
+
 
 # Storage Class for EBS volumes
 resource "kubernetes_storage_class" "ebs_gp3" {
