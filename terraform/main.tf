@@ -75,8 +75,6 @@ module "iam" {
 module "eks" {
   source = "./modules/eks"
 
-  addon_dependency = module.addons.ebs_csi_addon_arn
-
   project_name            = var.project_name
   environment             = var.environment
   aws_region              = var.aws_region
