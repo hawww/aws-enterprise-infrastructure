@@ -4,7 +4,6 @@ metadata:
   name: user-service-pdb
   namespace: default
 spec:
-  minAvailable: 1
-  selector:
+  minAvailable: 0
     matchLabels:
       app: user-service
