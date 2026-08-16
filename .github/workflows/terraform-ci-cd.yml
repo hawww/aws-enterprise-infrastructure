@@ -112,7 +112,7 @@ jobs:
 
       - name: Terraform Plan
         env:
-          TF_LOG: DEBUG
+          TF_LOG: INFO
         id: plan
         run: |
           export TF_VAR_db_password='MyStrongPassword123!'
@@ -207,7 +207,7 @@ jobs:
             echo "🚀 Executing Terraform Apply..."
             #terraform apply -auto-approve  -var="deploy_k8s_resources=false" -var="db_password=MyStrongPassword123!"
             #terraform apply -auto-approve  -var="deploy_k8s_resources=true"  -var="db_password=MyStrongPassword123!"
-            terraform apply -auto-approve 
+            terraform apply -auto-approve  tfplan
           fi
         working-directory: ./terraform
 
