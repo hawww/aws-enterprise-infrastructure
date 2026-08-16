@@ -165,6 +165,7 @@ jobs:
       - name: Apply Infrastructure
         env:
           TF_LOG: DEBUG
+          AWS_DEBUG: "true"
           AWS_TYPES_INTERACTIVE: false
           AWS_EC2_METADATA_DISABLED: true
         run: |
